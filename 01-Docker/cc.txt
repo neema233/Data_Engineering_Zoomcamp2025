@@ -1,0 +1,13 @@
+COPY green_taxi_trips(trip_id, pickup_datetime, dropoff_datetime, trip_distance, fare_amount, total_amount, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
+FROM '/var/lib/postgresql/data/green_tripdata_2019-10.csv' WITH (FORMAT CSV, HEADER TRUE);
+green_taxi_trips
+SELECT
+    COUNT(*) FILTER (WHERE trip_distance <= 1) AS "Up to 1 mile",
+    COUNT(*) FILTER (WHERE trip_distance > 1 AND trip_distance <= 3) AS "1 to 3 miles",
+    COUNT(*) FILTER (WHERE trip_distance > 3 AND trip_distance <= 7) AS "3 to 7 miles",
+    COUNT(*) FILTER (WHERE trip_distance > 7 AND trip_distance <= 10) AS "7 to 10 miles",
+    COUNT(*) FILTER (WHERE trip_distance > 10) AS "Over 10 miles"
+FROM green_taxi_trips
+WHERE lpep_pickup_datetime >= '2019-10-01' AND lpep_pickup_datetime < '2019-11-01';
+
+
